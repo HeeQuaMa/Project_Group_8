@@ -24,12 +24,12 @@ function search(req,res){
 }
 
 
-// function searchsach(req, res) {
-//     sql.executeSQL(`select * from Sach where MaSach like N'%${req.body.searchTK}%' or MaHang like N'%${req.body.searchTK}%' or TenSach like N'%${req.body.searchTK}%'
-//     `, (recordset) => {
-//         res.send(recordset.recordsets[0]);
-//     });
-// }
+function searchsach(req, res) {
+    sql.executeSQL(`select * from Sach where MaSach like N'%${req.body.searchTK}%' or MaHang like N'%${req.body.searchTK}%' or TenSach like N'%${req.body.searchTK}%'
+    `, (recordset) => {
+        res.send(recordset.recordsets[0]);
+    });
+}
 
 function searchhoadon(req, res) {
     sql.executeSQL(`select HoaDon.MaHD, MaKH,MaSach,SoLuong,GiaBan,NgayBan from HoaDon inner join HoaDonChiTiet on HoaDon.MaHD = HoaDonChiTiet.MaHD 
