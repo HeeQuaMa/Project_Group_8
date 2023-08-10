@@ -5,7 +5,7 @@ function getProducByCatId(req,res){
     sql.executeSQL(`select * from Sach where catId='${catId}'`, (recordset) => {
         var result = "";
         if (recordset.recordsets[0] === null || recordset.recordsets[0].length === 0) {
-            res.send("Chưa có sản phẩm");
+            //res.send("Chưa có sản phẩm");
         }
         else {
             recordset.recordsets[0].forEach(row => {
