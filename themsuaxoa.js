@@ -24,14 +24,14 @@ function checksach(req,res){
 }
 
 function adthem(req, res){
-    sql.executeSQL(`INSERT INTO Sach VALUES ( ${req.body.MaSach} ,N'${req.body.MaHang}', N'${req.body.TenSach}', N'${req.body.TacGia}'
-    , N'${req.body.NhaXB}',N'${req.body.Nhacungcap}',N'${req.body.ChuDe}', N'${req.body.Hinhthuc}',N'${req.body.NamXB}'
-    ,N'${req.body.Trongluong}',N'${req.body.Kichthuoc}',N'${req.body.Sotrang}', N'${req.body.DonGia}',N'${req.body.Mota}'
-    ,${req.body.trongkho}, N'${req.body.SachImage}',${req.body.catId},${req.body.proindex})
-    `, (recordset) => {
-        var sach = recordset.recordsets[0];
-        res.send(sach);
-    });
+    // sql.executeSQL(`INSERT INTO Sach VALUES ( ${req.body.MaSach} ,N'${req.body.MaHang}', N'${req.body.TenSach}', N'${req.body.TacGia}'
+    // , N'${req.body.NhaXB}',N'${req.body.Nhacungcap}',N'${req.body.ChuDe}', N'${req.body.Hinhthuc}',N'${req.body.NamXB}'
+    // ,N'${req.body.Trongluong}',N'${req.body.Kichthuoc}',N'${req.body.Sotrang}', N'${req.body.DonGia}',N'${req.body.Mota}'
+    // ,${req.body.trongkho}, N'${req.body.SachImage}',${req.body.catId},${req.body.proindex})
+    // `, (recordset) => {
+    //     var sach = recordset.recordsets[0];
+    //     res.send(sach);
+    // });
 }
 
 function adthemkh(req, res){
