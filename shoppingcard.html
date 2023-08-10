@@ -11,32 +11,28 @@
     function getShoppingCard() {
       if (localStorage.getItem("shoppingcard") == null || localStorage.getItem("shoppingcard") == undefined || localStorage.getItem("shoppingcard") == "[]") {
         const htmlTemplate = `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    .alert-box {
-      background-color: #F4A460; 
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      font-size: 24px;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  
-    <div class="alert-box">
-      Vui lòng chọn sản phẩm
-
-  </div>
-</body>
-</html>
-
-`;
-
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              .alert-box {
+                background-color: #F4A460; 
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                font-size: 24px;
+                text-align: center;
+              }
+            </style>
+          </head>
+          <body>
+              <div class="alert-box">
+                Vui lòng chọn sản phẩm
+            </div>
+          </body>
+          </html>
+          `;
         $('#content').html(htmlTemplate);
       }
       else {
