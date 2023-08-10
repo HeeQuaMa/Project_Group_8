@@ -1,5 +1,6 @@
 const sql = require('./sql');
 
+// fix
 function getShoppingCard(req, res) {
     var arrProductId = req.body.arrProductId;
     sql.executeSQL(`select * from Sach where MaSach in ${arrProductId}`, (recordset) => {
