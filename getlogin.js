@@ -2,7 +2,7 @@ const sql = require('./sql');
 
 function getlogin(req,res){
     sql.executeSQL(`select * from TaiKhoan where [TaiKhoan]='${req.body.TaiKhoan}' and MatKhau='${req.body.MatKhau}'`, (recordset) => {
-        var user = recordset.recordsets[0][0];
+        
         res.send([user]);
     });
 }
