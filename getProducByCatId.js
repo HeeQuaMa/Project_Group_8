@@ -23,6 +23,7 @@ function getProducByCatId(req,res){
     });
 }
 
+
 function getProducByChuDe(req,res){
     var ChuDe = req.body.ChuDe;
     sql.executeSQL(`select * from Sach where ChuDe= N'${ChuDe}' order by productIndex`, (recordset) => {
