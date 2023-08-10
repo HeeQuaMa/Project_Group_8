@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Bookstore</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/1147679ae7.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href=" http://localhost:3000/css/detail.css">
+</head>
+
+<script>
+  function search() {
+    window.location.href = "/index"
+  }
+  function nutsearch() {
+    window.location.href = "/index"
+  }
+
+  function menuClick(productType) {
+    window.location.href = "/index"
+  }
+
+  function menuClick1(productType) {
+    window.location.href = "/index"
+  }
+
+
+  function LoginOut() {
+    localStorage.removeItem("user");
+    window.location.href = "/index"
+  }
+  function admin() {
+    var user = localStorage.getItem("user");
+    var objUser = JSON.parse(user);
+    if (objUser[0].TaiKhoan === 'admin') {
+      window.location.href = "/admin"
+    }
+    else {
+      window.location.href = "/index"
+    }
+  }
+  $(document).ready(function () {
+    var arr = window.location.href.split('/');
+    $.get("http://localhost:3000/getDetailData/" + arr[arr.length - 1], function (data, status) {
+      // console.log(data)
+      $(".MaHang").html(data.MaHang);
+      $(".TenSach").html(data.TenSach);
+      $(".TacGia").html(data.TacGia);
+      $(".Nhacungcap").html(data.Nhacungcap);
+      $(".NhaXB").html(data.NhaXB);
+      $(".ChuDe").html(data.ChuDe);
+      $(".Hinhthuc").html(data.Hinhthuc);
+      $(".NamXB").html(data.NamXB);
+      $(".Trongluong").html(data.Trongluong);
+      $(".Kichthuoc").html(data.Kichthuoc);
+      $(".Sotrang").html(data.Sotrang);
+      $(".DonGia").html(data.DonGia + ' đ');
+      $(".Mota").html(data.Mota);
+      $(".SachImage").attr("src", "/images/" + data.SachImage);
+    });
+
+    var user = localStorage.getItem("user");
+    if (user === null || user === undefined) {
+      $("#user").html(" Đăng nhập");
+      $("#user").on("click", function () {
+        window.location.href = "/login";
+      });
+    }
+    else {
+      var objUser = JSON.parse(user);
+      $("#user").html(" " + objUser[0].TenTK);
+    }
+  });
+  function LoginOut() {
+    localStorage.removeItem("user");
+    window.location.href = "/index"
+  }
+  function admin() {
+    var user = localStorage.getItem("user");
+    var objUser = JSON.parse(user);
+    if (objUser[0].TaiKhoan === 'admin') {
+      window.location.href = "/admin"
+    }
+    else {
+      window.location.href = "/index"
+    }
+  }
+  function shoppingCard() {
+    window.location.href = "/shopping-card";
+  }
+
+
+  function addToCard() {
+    var arr = window.location.href.split('/');
+    var arrProductId = localStorage.getItem("shoppingcard");
+    $.get("http://localhost:3000/getDetailData/" + arr[arr.length - 1], function (data, status) {
+      if (arrProductId == null || arrProductId == undefined) {
+        arrProductId = [data.MaSach];
+      }
+      else {
+        arrProductId = JSON.parse(arrProductId);
+        if (arrProductId.indexOf(data.MaSach) == -1) {
+          arrProductId.push(data.MaSach);
+        }
+      }
+      arrProductId = JSON.stringify(arrProductId);
+      localStorage.setItem("shoppingcard", arrProductId);
+    });
+  }
+  function themcard() {
+    var arr = window.location.href.split('/');
+    var arrProductId = localStorage.getItem("shoppingcard");
+    $.get("http://localhost:3000/getDetailData/" + arr[arr.length - 1], function (data, status) {
+      if (arrProductId == null || arrProductId == undefined) {
+        arrProductId = [data.MaSach];
+      }
+      else {
+        arrProductId = JSON.parse(arrProductId);
+        if (arrProductId.indexOf(data.MaSach) == -1) {
+          arrProductId.push(data.MaSach);
+        }
+      }
+      arrProductId = JSON.stringify(arrProductId);
+      localStorage.setItem("shoppingcard", arrProductId);
+      setTimeout(() => {
+        window.location.href = "/shopping-card"
+      }, 200);
+    });
+  }
+
+</script>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <a href="http://localhost:3000/index"><img src="http://localhost:3000/img/logo%20(2).png"></a>
+      </div>
+
+      <div class="menu">
+        <li><a href="http://localhost:3000/index">Sách</a></li>
+        <li><a href="#">Sách được nhất yêu thích</a>
+          <ul class="loai-sach">
+
+            <li><a href="#" onclick="menuClick('1')">Lúc Ấy Tôi Chuyển Sinh Thành
+                Slime</a></li>
+            <li><a href="#" onclick="menuClick('2')">Your Name</a></li>
+            <li><a href="#" onclick="menuClick('3')">Diệt Slime Suốt 300 Năm, Tôi Levelmax
+                Lúc Nào Chẳng Hay</a></li>
+            <li><a href="#" onclick="menuClick('4')">Toàn Chức Cao Thủ</a></li>
+            <li><a href="#" onclick="menuClick('5')">OVERLORD</a></li>
+            <li><a href="#" onclick="menuClick('6')">Tháng Tư Là Lời Nói Dối Của Em</a></li>
+            <li><a href="#" onclick="menuClick('7')">Dáng Hình Thanh Âm</a></li>
+          </ul>
+
+        </li>
+        <li><a href="">Chủ đề</a>
+          <ul class="loai-sach">
+            <li><a href="#" onclick="menuClick1('Isekai')">Isekai</a></li>
+            <li><a href="#" onclick="menuClick1('Tình Cảm')">Tình cảm</a></li>
+            <li><a href="#" onclick="menuClick1('Võng Du')">Võng Du</a></li>
+          </ul>
+        </li>
+        <li><a href="">Liên hệ</a></li>
+        <li> <a style="cursor: pointer;" onclick="shoppingCard()"> Giỏ Hàng</a></li>
+
+      </div>
+      <div class="search-container">
+        <input type="text" id="search" onkeypress="search()" placeholder="Tìm kiếm">
+        <button type="submit" onclick="nutsearch()"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="other">
+        <li> <a style="cursor: pointer;" id="user" style="cursor: pointer;" class="fa fa-user" onclick="admin()"></a>
+        </li>
+        <li> <a style="cursor: pointer;" class="fa fa-sign-out-alt" onclick="LoginOut()"> Đăng xuất</a></li>
+      </div>
+    </header>
+
+    <!-- giữa -->
+    <div class="content">
+      <div class="leftcolumn">
+        <img class="SachImage">
+        <div class="box">
+          <button class="left" style="text-decoration: none"onclick="addToCard()"><b onclick="addToCard()">Thêm vào giỏ
+              hàng</b></button></br>
+          <button class="right" style="text-decoration: none" onclick="themcard()"><b onclick="themcard()">Mua bán</b></button>
+        </div>
+      </div>
+      <div class="rightcolumn">
+        <h2 class="TenSach"></h2>
+        <div class="mota">
+          <span>Nhà cung cấp: <b class="Nhacungcap"></b></span></br>
+          <span>Nhà xuất bản: <b class="NhaXB"></b></span></br>
+          <span>Chủ đề: <b class="ChuDe"></b></span></br>
+          <span>Tác giả: <b class="TacGia"></b></span></br>
+          <span>Hình thức bìa: <b class="Hinhthuc"></b></span>
+        </div></br>
+        <span class="pirce" style="color: rgb(211, 13, 13);">
+          <h1 class="DonGia"></h1>
+        </span></br>
+        <table class="data-table table-additional">
+          <colgroup>
+            <col width="200px">
+            <col>
+          </colgroup>
+          <tbody>
+            <tr>
+              <th class="table-label">Thời gian giao hàng</th>
+              <td>Giao hàng đến <a href="">Thay đổi</a></td>
+            </tr>
+            <tr>
+              <th class="table-label">Chính sách đổi trả</th>
+              <td>Đổi trả sản phẩm trong 30 ngày <a href="">Xem thêm</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="content2">
+
+      <h4><b>Sản phẩm liên quan</b></h4>
+      <a style="color: rgb(211, 13, 13)">
+        <h5>Series Bộ</h5>
+      </a>
+      <hr>
+
+      <div class="list">
+        <div class="row1">
+          <a href=""><img class="SachImage" alt=""></br></a>
+          <a href="" style="color: black; text-decoration: none"><b class="TenSach"></b></a></br>
+          <a href="" style="color: rgb(211, 13, 13); text-decoration: none"><b class="DonGia"></b></a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="content3">
+      <h4><b>Thông tin sản phẩm</b></h4>
+      <div class="gioithieu">
+        <hr>
+      
+      <table class="data-table table-additional">
+        <colgroup>
+          <col width="40%">
+          <col>
+        </colgroup>
+        <tbody>
+          <tr>
+            <th class="table-label">Mã hàng</th>
+            <td class="MaHang"></td>
+          </tr>
+          <tr>
+            <th class="table-label">Tên Nhà Cung Cấp</th>
+            <td class="data_supplier">
+              <a class="Nhacungcap" href=""></a>
+            </td>
+          </tr>
+          <tr>
+            <th class="table-label">Tác giả</th>
+            <td class="TacGia"></td>
+          </tr>
+          <tr>
+            <th class="table-label">NXB</th>
+            <td class="NhaXB"></td>
+          </tr>
+          <tr>
+            <th class="table-label">Năm XB</th>
+            <td class="NamXB"></td>
+          </tr>
+          <tr>
+            <th class="table-label">Ngôn Ngữ</th>
+            <td class="data_languages">Tiếng Việt</td>
+          </tr>
+          <tr>
+            <th class="table-label">Trọng lượng (gr)</th>
+            <td class="Trongluong"></td>
+          </tr>
+          <tr>
+            <th class="table-label">Kích Thước Bao Bì</th>
+            <td class="Kichthuoc"></td>
+          </tr>
+          <tr>
+            <th class="table-label">Số trang</th>
+            <td class="Sotrang"></td>
+          </tr>
+          <tr>
+            <th class="table-label">Hình thức</th>
+            <td class="Hinhthuc"></td>
+          </tr>
+          <tr>
+            <th class="table-label">Sản phẩm bán chạy nhất</th>
+            <td>
+              <a style="font-size: 14px; color: #2489F4;" href=" ">Top 100 sản phẩm Manga Khác bán chạy
+                của tháng</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+        <hr>
+        <p style="text-align: justify;font-weight: normal;padding-top: 20px;" class="Mota"></p>
+      </div>
+    </div>
+    <footer>
+
+      <p>
+        Công Ty Cổ Phần Dự Kim Với Số Đăng Ký Kinh Doanh: 0123456789 <br>
+        Địa Chỉ Đăng Kí: 12/34/56 Đường abcdfe phường xyz Q.aabbcc Tp.54321 - 090 123 456 <br>
+        Đặt Hàng Online : <span>090 321 123</span>
+      </p>
+      <div class="footer-bottom">
+        ©BookStore All Rights Reserved
+      </div>
+    </footer>
+  </div>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js"
+  integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+
+
+</html>

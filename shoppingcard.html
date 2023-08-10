@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Bookstore</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/1147679ae7.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href=" http://localhost:3000/css/shopping.css">
+  <script>
+
+    function getShoppingCard() {
+      if (localStorage.getItem("shoppingcard") == null || localStorage.getItem("shoppingcard") == undefined || localStorage.getItem("shoppingcard") == "[]") {
+        const htmlTemplate = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .alert-box {
+      background-color: #F4A460; 
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      font-size: 24px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  
+    <div class="alert-box">
+      Vui lòng chọn sản phẩm
+
+  </div>
+</body>
+</html>
+
+`;
+
+        $('#content').html(htmlTemplate);
+      }
+      else {
+        $.post("/getShoppingCard", {
+          arrProductId: localStorage.getItem("shoppingcard").replace('[', '(').replace(']', ')')
+        }, function (data, status) {
+          $('#content').html(data);
+          tongtien();
+        });
+      }
+    }
+
+    $(document).ready(function () {
+      getShoppingCard();
+    });
+
+    function tongtien() {
+      var arrSP = [];
+      var tongtien = 0
+      $(".product").toArray().forEach(item => {
+        tongtien += $(item).attr("price") * $(item).find(".soluong").val() * 1000;
+      });
+      $('.Tongtien').html(tongtien);
+    }
+
+    //Buy
+    function buyProducts() {
+      if ($('#TenKH2').val() == '') {
+        alert("Chưa nhập đủ thông tin");
+        return;
+      }
+      if ($('#Diachi2').val() == '') {
+        alert("Chưa nhập đủ thông tin");
+        return;
+      }
+      if ($('#SoDienThoai2').val() == '') {
+        alert("Chưa nhập đủ thông tin");
+        return;
+      }
+      if (localStorage.getItem("shoppingcard") == null || localStorage.getItem("shoppingcard") == undefined || localStorage.getItem("shoppingcard") == "[]") {
+        alert("Vui lòng chọn sản phẩm")
+      }
+      else {
+        if ($('#TenKH2').val() != '' && $('#Diachi2').val() != '' && $('#SoDienThoai2').val() != '') {
+          var arrSP = [];
+          $(".product").toArray().forEach(item => {
+            arrSP.push({
+              Masach: $(item).attr("productId"),
+              SoLuong: $(item).find(".soluong").val(),
+              GiaBan: $(item).attr("price"),
+            });
+          });
+
+          $.post("/adthemkh", {
+            MaKH: JSON.parse(localStorage.getItem('user'))[0].id,
+            TenKH: $('#TenKH2').val(),
+            Diachi: $('#Diachi2').val(),
+            SoDienThoai: $('#SoDienThoai2').val(),
+            Tongtien: document.querySelector(".Tongtien").innerHTML
+          }, function (data, status) {
+          });
+
+          $.post("/buyProduct", {
+            MaKH: JSON.parse(localStorage.getItem('user'))[0].id,
+            arrSP: arrSP,
+          }, function (data, status) {
+            console.log(JSON.parse(localStorage.getItem('user'))[0].id)
+            alert("Mua thành công");
+          });
+          setTimeout(() => {
+            window.location.href = "/index"
+            localStorage.removeItem("shoppingcard")
+          }, 2000);
+        }
+      }
+
+    }
+
+    function deleteProduct(productId) {
+      var arrSP = JSON.parse(localStorage.getItem("shoppingcard"));
+      var arrSP2 = [];
+      arrSP.forEach((item) => {
+        if (item != productId) {
+          arrSP2.push(item);
+        }
+      });
+      localStorage.setItem("shoppingcard", JSON.stringify(arrSP2));
+      getShoppingCard();
+    }
+
+
+    function search() {
+      window.location.href = "/index"
+    }
+    function nutsearch() {
+      window.location.href = "/index"
+    }
+
+    function menuClick(productType) {
+      window.location.href = "/index"
+    }
+
+    function menuClick1(productType) {
+      window.location.href = "/index"
+    }
+
+
+    function LoginOut() {
+      localStorage.removeItem("user");
+      window.location.href = "/index"
+    }
+    function admin() {
+      var user = localStorage.getItem("user");
+      var objUser = JSON.parse(user);
+      if (objUser[0].TaiKhoan === 'admin') {
+        window.location.href = "/admin"
+      }
+      else {
+        window.location.href = "/index"
+      }
+    }
+    $(document).ready(function () {
+      var user = localStorage.getItem("user");
+      if (user === null || user === undefined) {
+        $("#user").html(" Đăng nhập");
+        $("#user").on("click", function () {
+          window.location.href = "/login";
+        });
+      }
+      else {
+        var objUser = JSON.parse(user);
+        $("#user").html(" " + objUser[0].TenTK);
+      }
+    });
+    function LoginOut() {
+      localStorage.removeItem("user");
+      window.location.href = "/index"
+    }
+    function admin() {
+      var user = localStorage.getItem("user");
+      var objUser = JSON.parse(user);
+      if (objUser[0].TaiKhoan === 'admin') {
+        window.location.href = "/admin"
+      }
+      else {
+        window.location.href = "/index"
+      }
+    }
+    function shoppingCard() {
+      window.location.href = "/shopping-card";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <div class="logo">
+        <a href="http://localhost:3000/index"><img src="http://localhost:3000/img/logo%20(2).png"></a>
+      </div>
+
+      <div class="menu">
+        <li><a href="http://localhost:3000/index">Sách</a></li>
+        <li><a href="#">Sách được nhất yêu thích</a>
+          <ul class="loai-sach">
+
+            <li><a href="#" onclick="menuClick('1')">Lúc Ấy Tôi Chuyển Sinh Thành
+                Slime</a></li>
+            <li><a href="#" onclick="menuClick('2')">Your Name</a></li>
+            <li><a href="#" onclick="menuClick('3')">Diệt Slime Suốt 300 Năm, Tôi Levelmax
+                Lúc Nào Chẳng Hay</a></li>
+            <li><a href="#" onclick="menuClick('4')">Toàn Chức Cao Thủ</a></li>
+            <li><a href="#" onclick="menuClick('5')">OVERLORD</a></li>
+            <li><a href="#" onclick="menuClick('6')">Tháng Tư Là Lời Nói Dối Của Em</a></li>
+            <li><a href="#" onclick="menuClick('7')">Dáng Hình Thanh Âm</a></li>
+          </ul>
+
+        </li>
+        <li><a href="">Chủ đề</a>
+          <ul class="loai-sach">
+            <li><a href="#" onclick="menuClick1('Isekai')">Isekai</a></li>
+            <li><a href="#" onclick="menuClick1('Tình Cảm')">Tình cảm</a></li>
+            <li><a href="#" onclick="menuClick1('Võng Du')">Võng Du</a></li>
+          </ul>
+        </li>
+        <li><a href="">Liên hệ</a></li>
+        <li> <a style="cursor: pointer;" onclick="shoppingCard()"> Giỏ Hàng</a></li>
+
+      </div>
+      <div class="search-container">
+        <input type="text" id="search" onkeypress="search()" placeholder="Tìm kiếm">
+        <button type="submit" onclick="nutsearch()"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="other">
+        <li> <a style="cursor: pointer;" id="user" style="cursor: pointer;" class="fa fa-user" onclick="admin()"></a>
+        </li>
+        <li> <a style="cursor: pointer;" class="fa fa-sign-out-alt" onclick="LoginOut()"> Đăng xuất</a></li>
+      </div>
+    </header>
+
+
+
+    <h1 style="margin-bottom: 50px;">Giỏ hàng</h1>
+    <div id="content"></div>
+    <div class="payment">
+      <h2>Thông tin thanh toán</h2>
+      <form>
+        <label for="ho-ten">Họ và Tên:</label>
+        <input type="textten" id="TenKH2" required>
+
+        <label for="so-dien-thoai">Số điện thoại:</label>
+        <input type="tel" class="number" id="SoDienThoai2" required>
+
+        <label for="dia-chi">Địa chỉ nhận hàng:</label>
+        <textarea id="Diachi2" required></textarea>
+
+        <label for="tong-so-tien">Tổng số tiền (Đ):
+          <br><span class="Tongtien" style="color: red;font-size: 20px;">0</span><b style="color: red;font-size: 20px;">
+            Đ</b><br>
+        </label>
+
+
+        <input type="button" value="Thanh toán" onclick="buyProducts()">
+      </form>
+    </div>
+  </div>
+</body>
+
+
+</html>

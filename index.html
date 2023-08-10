@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width-device-width, initial-scale=1.0">
+  <title>Bookstore</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha384-KyM3H4HlwX3+tM5JvTlPhy3vpOzElAzmAYi6DKUn+uqN0hafk5X3EGxhBBqknmkP" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/1147679ae7.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <link rel="stylesheet" type="text/css" href="css/detail.css">
+  <link rel="stylesheet" type="text/css" href="css/shopping.css">
+
+</head>
+<script>
+  $(document).ready(function () {
+    $.get("http://localhost:3000/", function (data, status) {
+      $('#sanpham').html(data);
+    });
+    var user = localStorage.getItem("user");
+    if (user === null || user === undefined) {
+      $("#user").html(" Đăng nhập");
+      $("#user").on("click", function () {
+        window.location.href = "/login";
+      });
+    }
+    else {
+      var objUser = JSON.parse(user);
+      $("#user").html(" " + objUser[0].TenTK);
+    }
+  });
+
+  function search(event) {
+    if (event.keyCode === 13) {
+      $.post("http://localhost:3000/search", {
+        search: $('#search').val()
+      }, function (data, status) {
+        $('#sanpham').html(data);
+      });
+    }
+  }
+  function nutsearch() {
+    $.post("http://localhost:3000/search", {
+      search: $('#search').val()
+    }, function (data, status) {
+      $('#sanpham').html(data);
+    });
+  }
+
+  function menuClick(productType) {
+    $.post("http://localhost:3000/getProducByCatId", {
+      catId: productType
+    }, function (data, status) {
+      $('#sanpham').html(data);
+    });
+  }
+
+  function menuClick1(productType) {
+    $.post("http://localhost:3000/getProducByChuDe", {
+      ChuDe: productType
+    }, function (data, status) {
+      $('#sanpham').html(data);
+    });
+  }
+
+
+  function LoginOut() {
+    localStorage.removeItem("user");
+    window.location.href = "/index"
+  }
+
+  function admin() {
+    var user = localStorage.getItem("user");
+    var objUser = JSON.parse(user);
+    if (objUser[0].TenTK === 'Admin') {
+      window.location.href = "/admin"
+    }
+    else {
+      window.location.href = "/index"
+    }
+  }
+  function addToCard(MaSach) {
+    var arrProductId = localStorage.getItem("shoppingcard");
+    if (arrProductId == null || arrProductId == undefined) {
+      arrProductId = [MaSach];
+    }
+    else {
+      arrProductId = JSON.parse(arrProductId);
+      if (arrProductId.indexOf(MaSach) == -1) {
+        arrProductId.push(MaSach);
+      }
+    }
+    arrProductId = JSON.stringify(arrProductId);
+    localStorage.setItem("shoppingcard", arrProductId);
+  }
+  function shoppingCard() {
+    window.location.href = "/shopping-card";
+  }
+</script>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href=""><img src="./img/logo (2).png"></a>
+    </div>
+    <div class="menu">
+
+      <li><a href="">Sách</a></li>
+      <li><a href="">Sách được nhất yêu thích</a>
+        <ul class="loai-sach">
+
+          <li><a href="#" onclick="menuClick('1')">Lúc Ấy Tôi Chuyển Sinh Thành
+              Slime</a></li>
+          <li><a href="#" onclick="menuClick('2')">Your Name</a></li>
+          <li><a href="#" onclick="menuClick('3')">Diệt Slime Suốt 300 Năm, Tôi Levelmax
+              Lúc Nào Chẳng Hay</a></li>
+          <li><a href="#" onclick="menuClick('4')">Toàn Chức Cao Thủ</a></li>
+          <li><a href="#" onclick="menuClick('5')">OVERLORD</a></li>
+          <li><a href="#" onclick="menuClick('6')">Tháng Tư Là Lời Nói Dối Của Em</a></li>
+          <li><a href="#" onclick="menuClick('7')">Dáng Hình Thanh Âm</a></li>
+        </ul>
+
+      </li>
+      <li><a href="">Chủ đề</a>
+        <ul class="loai-sach">
+          <li><a href="#" onclick="menuClick1('Isekai')">Isekai</a></li>
+          <li><a href="#" onclick="menuClick1('Tình Cảm')">Tình cảm</a></li>
+          <li><a href="#" onclick="menuClick1('Võng Du')">Võng Du</a></li>
+        </ul>
+      </li>
+      <li><a href="">Liên hệ</a></li>
+      <li> <a style="cursor: pointer;" onclick="shoppingCard()"> Giỏ Hàng</a></li>
+
+    </div>
+    <div class="search-container">
+      <input type="text" id="search" onkeypress="search(event)" placeholder="Tìm kiếm">
+      <button type="submit" onclick="nutsearch()"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="other">
+      <li> <a style="cursor: pointer;" id="user" style="cursor: pointer;" class="fa fa-user" onclick="admin()"></a></li>
+      <li> <a style="cursor: pointer;" class="fa fa-sign-out-alt" onclick="LoginOut()"> Đăng xuất</a></li>
+    </div>
+  </header>
+  <section class="header">
+    <div class="aspect-ratio-169">
+      <img src="img/background1.jpg">
+      <img src="img/background2.jpg">
+      <img src="img/background4.jpg">
+    </div>
+
+    <div class="dot-container">
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </section>
+  <!------------------------------contact------------------------ -->
+  <section class="contact-item">
+    <div class="showsach">
+      <h1> Danh sách sản phẩm</h1>
+    </div>
+
+    <div class="showlistsanpham">
+      <div id="sanpham"></div>
+    </div>
+
+
+
+
+    <p>Tải Ứng Dụng BookStore</p>
+    <div class="app-download">
+      <a href="img/download.png"><img src="img/appstore3.png"></a>
+      <a href="img/download.png"><img src="img/googleplay.png"></a>
+    </div>
+    <p>Nhận Thêm Tin Từ BookStore</p>
+    <input type="text" placeholder="Nhập Email Của bạn...">
+  </section>
+  <!-- <footer>
+        <p>&copy; 2023 SaiGon Bookstore. All rights reserved.</p>
+    </footer> -->
+  <!-----------------------------footer---------------------------->
+  <footer>
+    <div class="footer-top">
+      <li><a href=""><img src="img/dangkibocongthuong.png"></a></li>
+      <li><a href="">
+          <alt="">
+        </a>Liên Hệ</li>
+      <li><a href="">
+          <alt="">
+        </a>Tuyển Dụng</li>
+      <li><a href="">
+          <alt="">
+        </a>Giới Thiệu</li>
+      <li>
+        <a href="https://www.facebook.com/" class="fab fa-facebook-f"></a>
+        <a href="https://www.instagram.com/" class="fab fa-instagram"></a>
+        <a href="https://www.youtube.com/" class="fab fa-youtube"></a>
+      </li>
+    </div>
+    <p>
+      Công Ty Cổ Phần Dự Kim Với Số Đăng Ký Kinh Doanh: 0123456789 <br>
+      Địa Chỉ Đăng Kí: 12/34/56 Đường abcdfe phường xyz Q.aabbcc Tp.54321 - 090 123 456 <br>
+      Đặt Hàng Online : <span>090 321 123</span>
+    </p>
+    <div class="footer-bottom">
+      ©BookStore All Rights Reserved
+    </div>
+  </footer>
+</body>
+<script>
+  // const header = document.querySelector("header");
+  // window.addEventListener("scroll", function(){
+  //     const x = window.pageYOffset;
+  //     if (x > 0){
+  //         header.classList.add("sticky");
+  //     }
+  //     else {
+  //         header.classList.remove("sticky");
+  //     }
+  // });
+  //     const header = document.querySelector("header")
+  // window.addEventListener("scroll",function(){
+  //     x = window.pageYOffset
+  //     if(x>0){
+  //         header.classList.add("sticky")
+  //     }
+  //     else{
+  //         header.classList.remove("sticky")
+  //     }
+  // });  
+
+
+  const images = document.querySelectorAll('.aspect-ratio-169 img');
+  const dots = document.querySelectorAll('.dot');
+
+  let currentIndex = 0;
+
+  function showImage(index) {
+    images.forEach((img, i) => {
+      img.classList.toggle('active', i === index);
+    });
+  }
+
+  function setActiveDot(index) {
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
+    });
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    showImage(currentIndex);
+    setActiveDot(currentIndex);
+  }
+
+  // Start the slideshow
+  const interval = setInterval(nextImage, 2000);
+
+  // Stop the slideshow when user clicks on a dot
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      clearInterval(interval);
+      currentIndex = i;
+      showImage(currentIndex);
+      setActiveDot(currentIndex);
+      interval = setInterval(nextImage, 5000);
+    });
+  });
+
+
+
+
+</script>
+
+</html>
