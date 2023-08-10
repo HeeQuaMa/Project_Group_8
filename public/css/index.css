@@ -276,6 +276,7 @@ footer p span {
     border-radius: 0 5px 5px 0;
     cursor: pointer;
     outline: none;
+    display: none;
   }
   
   /* Hover effect for the search button */
